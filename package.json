@@ -1,0 +1,21 @@
+{
+  "name": "typescript-lambda-template",
+  "version": "0.0.1",
+  "description": "A simple start to edit, build, and deploy your typescript lambda function to AWS.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/leenephi/typescript-lambda-template"
+  },
+  "main": "src/index.ts",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "author": "leenephi",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.61",
+    "@types/node": "^14.6.4",
+    "aws-sdk": "^2.746.0",
+    "typescript": "^4.0.2"
+  }
+}

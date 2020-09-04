@@ -1,0 +1,38 @@
+name: deploy to lambda
+on:
+  push:
+    branches: master
+jobs:
+  deploy_zip:
+    name: build and deploy lambda function
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v2.3.2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install and compile
+        run: |
+          npm ci
+          npm run compile
+        env:
+          CI: true
+      - name: zip
+        uses: TheDoctor0/zip-release@0.4.1
+        with:
+          filename: bundle.zip
+          path: .
+          directory: ./built
+      - name: default deploy
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{ secrets.AWS_FUNCTION_NAME }}
+          zip_file: ./built/bundle.zip
